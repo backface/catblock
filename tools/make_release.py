@@ -179,7 +179,6 @@ def main():
         # Selenium testing - enabled only on Travis-CI
         if os.environ.get("TRAVIS") != None:
             from selenium import webdriver
-            from selenium.webdriver.common.keys import Keys
             from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
             import time
 
@@ -246,48 +245,9 @@ def main():
         # Prepare manifest.json file
         prepareManifestFile()
 
-        # Selenium testing - enabled only on Travis-CI
-        if os.environ.get("TRAVIS") != None:
-            from selenium import webdriver
-            from selenium.webdriver.common.keys import Keys
-            from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-            import time
-
-            shutil.make_archive("catblock-opera", "zip", "catblock_opera")
-
-            chop = webdriver.ChromeOptions()
-            chop.add_extension("catblock-opera.zip")
-            chop = chop.to_capabilities()
-
-            chop["os"] = "OS X"
-            chop["os_version"] = "Sierra"
-            chop["browser"] = "Opera"
-            chop["browserstack.debug"] = "true"
-
-            driver = webdriver.Remote(
-                command_executor="http://"+os.environ["BS_USERNAME"]+":"+os.environ["BS_API"]+"@hub.browserstack.com:80/wd/hub",
-            desired_capabilities=chop)
-
-            driver.get("chrome-extension://mdcgnhlfpnbeieiiccmebgkfdebafodo/tools/tests/test.html")
-
-            time.sleep(2)
-
-            failure = driver.execute_script("return failure")
-
-            if failure == True:
-                print(driver.execute_script("return messages"))
-
-            driver.quit()
-
-            if failure == True:
-                sys.exit(1)
-        # End of Selenium testing
-
         # Generate a packed extension
         if args.extension != None:
-            # In Travis, catblock-opera.zip has already been created
-            if os.environ.get("TRAVIS") == None:
-                shutil.make_archive("catblock-opera", "zip", "catblock_opera")
+            shutil.make_archive("catblock-opera", "zip", "catblock_opera")
 
             # Rename to the Opera's compatible .nex file
             if args.extension == "browser":
