@@ -15,9 +15,8 @@ script:
     - python tools/make_release.py -b chrome -ext zip
     - python tools/make_release.py -b opera -ext zip
 after_success:
-    - cd tools/
-    - chmod +x ./publish_release.sh
-    - ./publish_release.sh
+    - chmod +x tools/publish_release.sh
+    - tools/publish_release.sh
 before_deploy:
     - echo "showing deployment path"
     - ls
