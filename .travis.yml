@@ -18,6 +18,9 @@ after_success:
     - cd tools/
     - chmod +x ./publish_release.sh
     - ./publish_release.sh
+before_deploy:
+    - echo "showing deployment path"
+    - ls
 deploy:
   provider: releases
   api_key:
