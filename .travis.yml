@@ -3,6 +3,7 @@ python:
     - "3.5"
 install: true
 before_script:
+    - echo "$TRAVIS_BUILD_DIR"
     - git config --global user.email "tomas@getadblock.com"
     - git config --global user.name "Tomáš Taro"
     - git remote rm origin
