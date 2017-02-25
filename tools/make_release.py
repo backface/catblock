@@ -2,29 +2,29 @@
 This script generates a release versions of CatBlock for different platforms
 and also an unpacked development environment
 
-Compatible with Python v3.x
+Compatible with Python v3.x only
 
-Author: Tomas Taro
+Author: Tomáš Taro
 License: GNU GPLv3
 """
 
 def main():
     import json # Provides JSON-related functions
     import os # Provides file-system functions
-    import sys
+    import sys # Provides system functions
     import shutil # Provides folders functions
     import argparse # Provides functions for parsing arguments
 
     # Parse passed arguments
-    parser = argparse.ArgumentParser(description="This script generates CatBlock for a specified browser")
+    parser = argparse.ArgumentParser(description="This script generates CatBlock extension for different platforms and/or an unpacked development environment.")
     parser.add_argument("-b", "--browser", help="What browser do you want to build an extension for?", required=True)
-    parser.add_argument("-ext", "--extension", help="Generate an extension package for a particular browser?", required=False)
-    parser.add_argument("-devenv", help="Generate an unpacked development environment?", required=False)
+    parser.add_argument("-ext", "--extension", help="Generate browser-specific extension package?", required=False)
+    parser.add_argument("-devenv", help="Generate an unpacked development environment?", action="store_true")
     args = parser.parse_args()
 
     # When nothing has been defined except the target, print an exception and return
-    if args.extension == None and args.devenv == None:
-        print("You must specify, whether to create an unpacked development environment or to generate an extension package")
+    if args.extension == None and args.devenv == False:
+        print("You must specify, whether to create an unpacked development environment or to generate an extension package.")
         sys.exit(1)
 
     # Remove .DS_Store files
@@ -45,6 +45,10 @@ def main():
                             "id": "catblock@catblock.tk",
                             "strict_min_version": "48.0"
                         }
+                    },
+                    "options_ui": {
+                        "page": "options/index.html",
+                        "open_in_tab": True
                     }
                 }
             },
@@ -63,7 +67,7 @@ def main():
             "opera": {
                 "path": "catblock_opera/manifest.json",
                 "key": {
-                    "minimum_opera_version": "35"
+                    "minimum_opera_version": "41"
                 }
             }
         }
@@ -77,9 +81,8 @@ def main():
 
             # Needed for determining an extension ID used for automated tests via BrowserStack
             if args.browser == "chrome" and os.environ.get("TRAVIS") != None:
-                keys.update({ "key": "emghbjjpdkocbmeibmkblchiognbjiji" })
+                keys.update({ "key": os.environ["EXTENSION_KEY"] })
             elif args.browser == "firefox":
-                keys.pop("author", None)
                 keys.pop("optional_permissions", None)
                 keys.pop("options_page", None)
                 keys.pop("incognito", None)
@@ -121,7 +124,7 @@ def main():
                 shutil.move("catblock-firefox.zip", "builds/catblock-firefox.zip")
 
         # When an unpacked development environment should not be created, remove the folder
-        if args.devenv == None:
+        if args.devenv == False:
             shutil.rmtree("catblock_firefox")
 
         print("Done!")
@@ -152,7 +155,7 @@ def main():
             shutil.move("catblock-edge.zip", "builds/catblock-edge.zip")
 
         # When an unpacked development environment should not be created, remove the folder
-        if args.devenv == None:
+        if args.devenv == False:
             shutil.rmtree("catblock_edge")
 
         print("Done!")
@@ -193,7 +196,7 @@ def main():
                 command_executor="http://"+os.environ["BS_USERNAME"]+":"+os.environ["BS_API"]+"@hub.browserstack.com:80/wd/hub",
             desired_capabilities=chop)
 
-            driver.get("chrome-extension://pgojeaneabfggifhijmhbomgidllkfhp/tools/tests/test.html")
+            driver.get("chrome-extension://mdcgnhlfpnbeieiiccmebgkfdebafodo/tools/tests/test.html")
 
             time.sleep(2)
 
@@ -222,7 +225,7 @@ def main():
                 shutil.move("catblock-chrome.zip", "builds/catblock-chrome.zip")
 
         # When an unpacked development environment should not be created, remove the folder
-        if args.devenv == None:
+        if args.devenv == False:
             shutil.rmtree("catblock_chrome")
 
         print("Done!")
@@ -253,7 +256,7 @@ def main():
                 shutil.move("catblock-opera.zip", "builds/catblock-opera.zip")
 
         # When an unpacked development environment should not be created, remove the folder
-        if args.devenv == None:
+        if args.devenv == False:
             shutil.rmtree("catblock_opera")
 
         print("Done!")
