@@ -109,7 +109,7 @@ def main():
 
         # Copy the content of the original folder into /catblock_firefox and
         # ignore hidden files, builds and tools folders
-        shutil.copytree(os.getcwd(), "catblock_firefox", ignore=shutil.ignore_patterns(".*", "builds", "tools"))
+        shutil.copytree(os.getcwd(), "catblock_firefox", ignore=shutil.ignore_patterns(".*", "builds", "tools", "catblock/_locales"))
 
         # Prepare manifest.json file
         prepareManifestFile()
@@ -140,7 +140,7 @@ def main():
             shutil.rmtree("catblock_edge")
 
         # Copy the content of the original folder into /catblock_edge/catblock and ignore hidden files and builds folder
-        shutil.copytree(os.getcwd(), "catblock_edge/catblock", ignore=shutil.ignore_patterns(".*", "builds"))
+        shutil.copytree(os.getcwd(), "catblock_edge/catblock", ignore=shutil.ignore_patterns(".*", "builds", "tools", "catblock/_locales"))
 
         # Copy instructions file and setup file into "/catblock_edge" folder
         shutil.move("catblock_edge/catblock/tools/instructions.txt", "catblock_edge")
@@ -171,7 +171,7 @@ def main():
             shutil.rmtree("catblock_chrome")
 
         # Copy the content of the original folder into /catblock_chrome and ignore hidden files, builds and tools folders
-        shutil.copytree(os.getcwd(), "catblock_chrome", ignore=shutil.ignore_patterns(".*", "builds"))
+        shutil.copytree(os.getcwd(), "catblock_chrome", ignore=shutil.ignore_patterns(".*", "builds", "tools", "catblock/_locales"))
 
         # Prepare manifest.json file
         prepareManifestFile()
@@ -240,7 +240,7 @@ def main():
             shutil.rmtree("catblock_opera")
 
         # Copy the content of the original folder into /catblock_opera and ignore hidden files, builds and tools folders
-        shutil.copytree(os.getcwd(), "catblock_opera", ignore=shutil.ignore_patterns(".*", "builds", "tools"))
+        shutil.copytree(os.getcwd(), "catblock_opera", ignore=shutil.ignore_patterns(".*", "builds", "tools", "catblock/_locales"))
 
         # Prepare manifest.json file
         prepareManifestFile()
